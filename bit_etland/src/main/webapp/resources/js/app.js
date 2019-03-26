@@ -8,13 +8,14 @@ app = (()=>{
 		setContentView();
 	};
 	let setContentView=()=>{
-		alert('when 전: '+$.js());
+	
 		$.when(
 			$.getScript($.js()+'/component/compo.js'),
 			$.getScript($.js()+'/customer/cust.js'),
+			$.getScript($.js()+'/common/auth.js'),
 			$.getScript($.js()+'/employee/emp.js')
 		).done(()=>{
-			cust.permission.login();
+			auth.permission.login();
 		});
 	};
 	return {init: init,
@@ -25,7 +26,6 @@ app.$ = {
 		init : (x)=>{
 			$.getScript(x+'/resources/js/router.js',()=>{
 				$.extend(new Session(x));
-				alert('app.$.init 세션값은 : '+sessionStorage.getItem('js'));
 				app.onCreate();
 			})
 		}
