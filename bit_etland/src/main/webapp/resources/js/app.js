@@ -8,14 +8,13 @@ app = (()=>{
 		setContentView();
 	};
 	let setContentView=()=>{
-	
 		$.when(
 			$.getScript($.js()+'/component/compo.js'),
 			$.getScript($.js()+'/customer/cust.js'),
 			$.getScript($.js()+'/common/auth.js'),
 			$.getScript($.js()+'/employee/emp.js')
 		).done(()=>{
-			auth.permission.login();
+			 auth.init();
 		});
 	};
 	return {init: init,
