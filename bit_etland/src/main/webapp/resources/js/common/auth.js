@@ -15,16 +15,18 @@ auth = (()=>{
     };
      
 	let setContentView =()=>{
-		$.getScript(compojs)
-		.done(()=>{
+		$.getScript(compojs,()=>{
 			 // 오른쪽 디폴트 화면으로 로그인폼
 			$(r_cnt).empty();
 			$(compo.cust_login_form())
 			.appendTo(r_cnt);
+			$('form button[type=submit]').click(e=>{
+					e.preventDefault();
 			login(); // 디폴트화면 기능
-            // 왼쪽 네비게이션
-		$(l_cnt+' ul.nav').empty();
-		let arr = 	[{name: 'login' ,val:'로그인'},
+			});
+			// 왼쪽 네비게이션
+			$(l_cnt+' ul.nav').empty();
+		let arr = [{name: 'login' ,val:'로그인'},
 					{name: 'join',val:'회원가입'},
 					{name: 'access',val:'사원접속'},
 					{name: 'register',val:'사원등록'}
@@ -40,7 +42,10 @@ auth = (()=>{
 				$(r_cnt).empty();
 				$(compo.cust_login_form())
 				.appendTo(r_cnt);
-				login();  // 클릭이벤트 처리
+				$('form button[type=submit]').click(e=>{
+					e.preventDefault();
+					login(); // 디폴트화면 기능
+				});
 				break;
 			case 'join':
 				$(r_cnt).empty();
@@ -65,8 +70,8 @@ auth = (()=>{
       alert('component/compo.js 를 찾지  못했습니다.');
      });
 };
+
 let login =()=>{
-	$('form button[type=submit]').click(()=>{
 		let data ={customerID:$('form input[name=uname]').val(),
 				password:$('form input[name=psw]').val()};
 		alert('ctx:'+data.customerID);
@@ -78,9 +83,9 @@ let login =()=>{
             dataType: 'json',
             contentType : "application/json",
             success : d=>{
+            	alert('로그인 성공 2 '+d.customerID);
             	if(d.customerID!==''){
-            		 alert('로그인 성공 2 '+d.customerName);
-					 $(r_cnt).empty();
+            		alert('로그인 성공 2 '+d.customerName);
 					 $(r_cnt).html(compo.cust_mypage());
             	}else{
             		alert('로그인 실패');
@@ -89,8 +94,7 @@ let login =()=>{
             error : e=>{
                 alert('실패');
             }
-		 });
-	})
+	 });
 };
 	let join =()=>{};
 	let register =()=>{};
