@@ -78,7 +78,13 @@ let login =()=>{
             dataType: 'json',
             contentType : "application/json",
             success : d=>{
-                alert(d.customerID);
+            	if(d.customerID!==''){
+            		 alert('로그인 성공 2 '+d.customerName);
+					 $(r_cnt).empty();
+					 $(r_cnt).html(compo.cust_mypage());
+            	}else{
+            		alert('로그인 실패');
+            	}
             },
             error : e=>{
                 alert('실패');

@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bit_etland.web.mapper.CustMapper">
-  <select id="selectCustomer" resultType="com.bit_etland.web.cust.customer">
+<mapper namespace="com.bit_etland.web.cust.CustomerMapper">
+  <select id="selectCustomer" resultType="com.bit_etland.web.cust.Customer">
     SELECT 
     	CUSTOMER_ID customerID, 
         CUSTOMER_NAME customerName, 
@@ -14,13 +14,15 @@
 		ADDRESS address,
 		POSTAL_CODE postalCode,
 		PHOTO photo
-	FROM CUSTOMERS 
-   	WHERE CUSTOMER_ID LIKE #{customerID}
-   	AND PASSWORD LIKE #{password}
+		FROM CUSTOMERS 
+	   	WHERE CUSTOMER_ID LIKE #{customerID}
+		<if test="password != null">
+	  	 AND PASSWORD LIKE #{password}
+		</if>
   </select>
   <insert
 		  id="insertCustomer"
-		  parameterType="com.bit_etland.web.cust.customer"
+		  parameterType="com.bit_etland.web.cust.Customer"
 		  flushCache="true"
 		  statementType="PREPARED"
 		  timeout="20">
@@ -45,7 +47,7 @@
     </insert>
 	    <update
 			  id="updateCustomer"
-			  parameterType="com.bit_etland.web.cust.customer"
+			  parameterType="com.bit_etland.web.cust.Customer"
 			  flushCache="true"
 			  statementType="PREPARED"
 			  timeout="20">
@@ -59,7 +61,7 @@
 		  </update>
 	    <delete
 			  id="deleteCustomer"
-			  parameterType="com.bit_etland.web.cust.customer"
+			  parameterType="com.bit_etland.web.cust.Customer"
 			  flushCache="true"
 			  statementType="PREPARED"
 			  timeout="20">

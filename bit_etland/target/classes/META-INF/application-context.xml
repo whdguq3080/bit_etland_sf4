@@ -25,6 +25,7 @@
 		<property name="prefix" value="/WEB-INF/views/" />
 		<property name="suffix" value=".jsp" />
 	</bean>	
+	
 	<context:property-placeholder location="classpath:config/database.properties"/>
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${jdbc.driverClassName}"/>
@@ -36,9 +37,12 @@
 		<property name="dataSource" ref="dataSource"/>
 		<property name="mapperLocations" 
 				  value="classpath:com/bit_etland/web/**/*Mapper.xml"/> 
+	</bean> 
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactoryBean"/>
 	</bean>
-	<mybatis-spring:scan base-package="com.bit_etland.web"/>
+	 <mybatis-spring:scan base-package="com.bit_etland.web"/> 
 </beans>
