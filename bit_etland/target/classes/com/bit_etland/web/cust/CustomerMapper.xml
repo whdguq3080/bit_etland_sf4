@@ -33,17 +33,15 @@
 					        PHONE,
 					        CITY,
 					        ADDRESS,
-					        POSTAL_CODE,
-					        PHOTO) 
+					        POSTAL_CODE) 
         VALUES ( #{customerID}
-	            ,#{customerName}
-	            ,#{password}
-	            ,#{ssn}
-	            ,#{phone}
-	            ,#{city}
-	            ,#{address}
-	            ,#{postalCode}
-	            ,#{photo})
+	           	 ,#{customerName}
+	            	,#{password}
+	           		,#{ssn}
+	            	,#{phone}
+	            	,#{city}
+	            	,#{address}
+	            	,#{postalCode})	 
     </insert>
 	    <update
 			  id="updateCustomer"

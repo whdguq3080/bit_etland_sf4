@@ -13,6 +13,6 @@ public interface EmployeeMapper {
 	public Employee selectEmployee(Employee emp);
 	public int countEmployees();
 	public boolean existsEmployee(Employee emp);
-	public void updateEmployee(EmployeeMapper emp);
-	public void deleteEmployee(EmployeeMapper emp);
+	public Employee updateEmployee(Employee emp);
+	public void deleteEmployee(Employee emp);
 }
