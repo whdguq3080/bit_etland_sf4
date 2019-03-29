@@ -97,9 +97,7 @@ let login =()=>{
 						 $(r_cnt).html(compo.cust_update_form(d));
 						 $('#myupdate').click(e=>{ */
             		  alert('로그인');	
-            		$.getScript(custjs,()=>{
-            			cust.init();
-					 });
+            		cust.init(d);
             	}else{
             	}
             },

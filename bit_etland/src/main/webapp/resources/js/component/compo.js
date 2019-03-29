@@ -148,7 +148,7 @@ compo = {
 			+'    </div>'
 			+'  </div>'
 			+'</form>'},
-			cust_mypage:()=>{
+			cust_mypage: x=>{
 				return '<body class="w3-light-grey">'
 				+'<!-- Page Container -->'
 				+'<div class="w3-content w3-margin-top" style="max-width:1400px;">'
@@ -161,14 +161,14 @@ compo = {
 				+'        <div class="w3-display-container">'
 				+'          <img src="/web/resources/img/img_avatar2.png" style="width:100%" alt="Avatar">'
 				+'          <div class="w3-display-bottomleft w3-container w3-text-black">'
-				+'            <h2>Jane doe</h2>'
+				+'            <h2>'+x.customerName+'</h2>'
 				+'          </div>'
 				+'        </div>'
 				+'        <div class="w3-container">'
-				+'          <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>123</p>'
-				+'          <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>456</p>'
-				+'          <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>789</p>'
-				+'          <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>000</p>'
+				+'          <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>'+x.customerID+'</p>'
+				+'          <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>'+x.phone+'</p>'
+				+'          <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>'+x.city+'</p>'
+				+'          <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>'+x.address+'</p>'
 				+'          <hr>'
 				+'          <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Skills</b></p>'
 				+'          <p>Adobe Photoshop</p>'

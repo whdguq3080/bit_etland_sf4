@@ -1,6 +1,6 @@
 var cust = cust || {}
 cust = (()=>{
-	let init =()=>{
+	let init =(d)=>{
 			_ = $.ctx();
 			js = $.js();
 			compojs = js+'/component/compo.js';
@@ -9,17 +9,14 @@ cust = (()=>{
 			r_cnt = '#right_content';
 			l_cnt = '#left_content';
 			but = 'form button[type=submit]';
-			onCreate();
+			onCreate(d);
 		};
-		let onCreate =()=>{
-			setContentView();
+		let onCreate =(d)=>{
+			setContentView(d);
 		};
-		let setContentView =()=>{
+		let setContentView =(d)=>{
 		
 		$.getScript(compojs,()=>{
-		$(r_cnt).empty();
-		$(r_cnt).html(compo.cust_mypage());
-		
 		$(l_cnt+' ul.nav').empty();
 		let arr = [
 				{name : 'mypage', val : '마이페이지'},
@@ -41,9 +38,7 @@ cust = (()=>{
 			case 'mypage':
 			alert('마이페이지 접속');
 				$(r_cnt).empty();
-				$('form button[type=submit]').click(e=>{
-					$(r_cnt).html(compo.cust_mypage());
-				});
+				mypage(d);
 			break;
 			case 'change':
 				alert('정보수정 접속');
@@ -66,16 +61,8 @@ cust = (()=>{
 				});
 				break;
 			case 'shoppingMall':
-				$>getScript(empjs,()=>{}).fail(()=>{
-				})();
-				alert('쇼핑몰 접속');
 				$(r_cnt).empty();
-				$(compo.carousel())
-				.appendTo(r_cnt);
-				$('form button[type=submit]').click(e=>{
-				e.preventDefault();
-				join();
-				});
+				prd.init();
 				break;
 			case 'details':
 				alert('구매내역 접속');
@@ -95,6 +82,16 @@ cust = (()=>{
 		$(this).addClass('active');
 	})
 };
-
+let mypage = d=>{
+	$(r_cnt).html(compo.cust_mypage(
+			{customerName:d.customerName
+			,customerID:d.customerID
+			,phone:d.phone
+			,city:d.city
+			,address:d.address
+			
+			}));
+	
+}
 	return {init : init};
 })();	

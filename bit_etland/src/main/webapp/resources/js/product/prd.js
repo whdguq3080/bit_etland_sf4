@@ -1,6 +1,6 @@
 var prd = prd || {}
 prd= (()=>{
-	let init=x=>{
+	let init=()=>{
 	r_cnt = '#right_content';	
 	onCreate();
 	};
@@ -9,10 +9,6 @@ prd= (()=>{
 	};
 	let setContentview=()=>{
 	$(r_cnt).html(compo.carousel());
-	$.when(
-			$.js()+'/cmp/compo.js',
-			$.js()+'/cmp/compo.js'
-	)
 	};
 	let post=()=>{
 		

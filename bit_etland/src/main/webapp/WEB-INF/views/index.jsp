@@ -133,6 +133,7 @@
 <script src="<%=application.getContextPath()%>/resources/js/employee/emp.js"></script>
 <script src="<%=application.getContextPath()%>/resources/js/customer/cust.js"></script>
 <script src="<%=application.getContextPath()%>/resources/js/common/auth.js"></script>
+<script src="<%=application.getContextPath()%>/resources/js/product/prd.js"></script>
 <script>
 app.init('<%=application.getContextPath()%>');
 </script>	
