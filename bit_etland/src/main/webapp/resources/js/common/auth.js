@@ -5,6 +5,7 @@ auth = (()=>{
 		_ = $.ctx();
 		js = $.js();
 		compojs = js+'/component/compo.js';
+		custjs = js+'/customer/cust.js';
 		r_cnt = '#right_content';
 		l_cnt = '#left_content';
 		but = 'form button[type=submit]';
@@ -13,23 +14,13 @@ auth = (()=>{
 	let onCreate =()=>{
           setContentView();
     };
-     
 	let setContentView =()=>{
-		
 		$.getScript(compojs,()=>{
 			$(r_cnt).html(compo.cust_login_form());
 			// 오른쪽 디폴트 화면으로 로그인폼
 			$(but).click(e=>{
 			e.preventDefault(); // 버블링을 중단시키는 역할
 			login(); // 디폴트화면 기능
-
-			/*$(r_cnt).empty();
-			$(compo.cust_join_form())
-			.appendTo(r_cnt);
-			$(but).click(e=>{
-				e.preventDefault(); // 버블링을 중단시키는 역할
-			join();*/
-			/*});*/
 			});
 			// 왼쪽 네비게이션
 			$(l_cnt+' ul.nav').empty();
@@ -45,6 +36,8 @@ auth = (()=>{
 			.appendTo(l_cnt+' ul.nav')
 			.click(function(){
 				let that = $(this).attr('name');
+				$(this).addClass('active');
+				$(this).siblings().removeClass('active');
 				switch(that){
 				case 'login':
 				alert('로그인 접속');
@@ -53,7 +46,7 @@ auth = (()=>{
 					.appendTo(r_cnt);
 					$('form button[type=submit]').click(e=>{
 					e.preventDefault();
-					login(); // 디폴트화면 기능
+					login();
 				});
 				break;
 				case 'join':
@@ -61,11 +54,8 @@ auth = (()=>{
 					$(r_cnt).empty();
 					$(compo.cust_join_form())
 					.appendTo(r_cnt);
-					alert('회원가입 접속111');
 					$('form button[type=submit]').click(e=>{
 					e.preventDefault();
-					alert('회원가입 접속222');
-					
 					join();
 				});
 				break;
@@ -84,6 +74,7 @@ auth = (()=>{
 				}
 			});
 		});	
+	$('#login').addClass('active');	
 	})
 	.fail(()=>{
 		alert('component/compo.js 를 찾지  못했습니다.');
@@ -100,12 +91,14 @@ let login =()=>{
             contentType : "application/json",
             success : d=>{
             	if(d.customerID!==''){
-					 $(r_cnt).html(compo.cust_mypage(d));
+            	/*$(r_cnt).html(compo.cust_mypage(d));
 					 $('#update').click(e=>{
-						 e.preventDefault();
+						 e.preventDefault();/* 
 						 $(r_cnt).html(compo.cust_update_form(d));
-						 $('#myupdate').click(e=>{ 
-					 });
+						 $('#myupdate').click(e=>{ */
+            		  alert('로그인');	
+            		$.getScript(custjs,()=>{
+            			cust.init();
 					 });
             	}else{
             	}

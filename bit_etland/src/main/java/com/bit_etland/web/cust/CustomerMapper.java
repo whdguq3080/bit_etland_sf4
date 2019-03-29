@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CustomerMapper {
 	public void insertCustomer(Object o);
+	public Customer selectCustomer(Customer cust);
 	public List<Customer> selectCustomers(Map<?,?> map);
 	public List<Customer> selectCustomersList(Map<?,?> map);
 	public int countCustomer(Object o);
@@ -16,6 +17,5 @@ public interface CustomerMapper {
 	public Map<String, Object> selectProfile(Object o);
 	public void deleteCustomer(Customer cust);
 	
-	public Customer selectCustomer(Customer cust);
 	public Map<String, Object> selectPhone(Object o);
 }
