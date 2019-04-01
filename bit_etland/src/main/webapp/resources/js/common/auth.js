@@ -70,6 +70,11 @@ auth = (()=>{
 					$(r_cnt).empty();
 					$(compo.emp_access_form())
 					.appendTo(r_cnt);
+					$('#access_btn').click(e=>{
+						e.preventDefault();
+						alert('사원 접속 클릭');
+						access();
+					});
 					break;
 				}
 			});
@@ -157,7 +162,8 @@ let register =()=>{
             success : d=>{
             	alert('회원가입 성공  '+d.msg);
             	if(d.msg ==='success'){
-            		 $("#right_content").html(compo.cust_login_form());
+            		
+            		$("#right_content").html(compo.cust_login_form());
 					 $('form button[type=submit]').click(e=>{
 							e.preventDefault();
 							login();
@@ -173,34 +179,39 @@ let register =()=>{
             }
 		 });
 	};
-	let access =()=>{
-		let data ={employeesID:$('form input[name=employeesID]').val(),
-				name:$('form input[name=name]').val()};
-		$.ajax({
-            url : _+'/users/cust/'+data.employeesID,
-            type : 'post',
-            data : JSON.stringify(data),
-            dataType: 'json',
-            contentType : "application/json",
-            success : d=>{
-            	if(d.customerID!==''){
-            		 $("#right_content").html(compo.cust_mypage(d));
-            		 $('#update').click(e=>{
- 						e.preventDefault();
- 						$(r_cnt).html(compo.cust_update_form(d));
- 						$('#my_update').click(e=>{
- 							e.preventDefault();
- 							update();
- 						});
-            		 });
-            	}else{
-            		alert('error');
-            	}
-            },
-            error : e=>{
-                alert('실패');
-            }
-	 });
-};
+let access =()=>{
+		let ok = confirm('사원 입니까?');
+		if(ok){
+			let emp_no = prompt('사원번호 입력하세요');
+			$.getJSON(_+'/emp', d=>{
+	            	if(emp_no===d.employeesID){
+	            		alert('사원 인증');
+	            		//이름 입력창을 그린다
+	            		$(r_cnt).empty();
+	    				$(r_cnt).html(compo.emp_access_form());
+	            		$('<label for="name"><b>name</b></label>')
+	            		+ $('<input type="text" placeholder="Enter name" id="name" name="name" value="김경민">')
+	            		.appendTo('form div#emp')
+	            		$('form button[type=submit]')
+	            		.click(e=>{
+							e.preventDefault();
+						if($('#name').val() === d.name){//고객 명단
+	            		cust.list();
+	            		}else{
+							alert('사원번호가 일치하지 않습니다123.');
+	            		}
+	            		});	
+	            	}else{
+						alert('사원번호가 일치하지 않습니다.');
+	            				//사원번호가 일치하지 않습니다.
+	            	}
+				});
+	    }else{
+	    	 alert('사원 전용 페이지 입니다..');
+	    	 // 사원 전용 페이지 입니다.
+	    	 // 되돌아가기 버튼이 보인다.
+	    }
+	};
+
 	return {init : init};
 })();	

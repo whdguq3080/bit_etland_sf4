@@ -2,41 +2,24 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bit_etland.web.cust.CustomerMapper">
-  <select id="selectCustomer" resultType="com.bit_etland.web.cust.Customer">
+<mapper namespace="com.bit_etland.web.emp.EmployeeMapper">
+  <select id="findOneEmployee" resultType="com.bit_etland.web.emp.Employee">
     SELECT 
-    	CUSTOMER_ID customerID, 
-        CUSTOMER_NAME customerName, 
-        PASSWORD password,
-		SSN ssn,
-		PHONE phone,
-		CITY city,
-		ADDRESS address,
-		POSTAL_CODE postalCode,
-		PHOTO photo
-		FROM CUSTOMERS 
-	   	WHERE CUSTOMER_ID LIKE #{customerID}
-		<if test="password != null">
-	  	 AND PASSWORD LIKE #{password}
-		</if>
+    	EMPLOYEE_ID employeesID, 
+        MANAGER manager, 
+        NAME name,
+		BIRTH_DATE birthDate,
+		PHOTO photo,
+		NOTES notes
+		FROM EMPLOYEES 
+	  <!--   	WHERE EMPLOYEE_ID LIKE #{employeesID}
+		<if test="employeesID != null">
+	  	 AND NAME LIKE #{name}
+		</if>  -->
   </select>
-  <select id="selectCustomers" resultType="com.bit_etland.web.cust.Customer"
-  	parameterType="com.bit_etland.web.cmm.Proxy">
-    SELECT 
-    	CUSTOMER_ID customerID, 
-        CUSTOMER_NAME customerName, 
-        PASSWORD password,
-		SSN ssn,
-		PHONE phone,
-		CITY city,
-		ADDRESS address,
-		POSTAL_CODE postalCode,
-		PHOTO photo
-		FROM CUSTOMERS 
-  </select>
-  		<insert
-		  id="insertCustomer"
-		  parameterType="com.bit_etland.web.cust.Customer"
+  <insert
+		  id="insertEmployee"
+		  parameterType="com.bit_etland.web.emp.Employee"
 		  flushCache="true"
 		  statementType="PREPARED"
 		  timeout="20">
@@ -58,8 +41,8 @@
 	            	,#{postalCode})	 
     </insert>
 	    <update
-			  id="updateCustomer"
-			  parameterType="com.bit_etland.web.cust.Customer"
+			  id="updateEmployee"
+			  parameterType="com.bit_etland.web.emp.Employee"
 			  flushCache="true"
 			  statementType="PREPARED"
 			  timeout="20">
@@ -72,8 +55,8 @@
 			  WHERE CUSTOMER_ID LIKE #{customerID}
 		  </update>
 	    <delete
-			  id="deleteCustomer"
-			  parameterType="com.bit_etland.web.cust.Customer"
+			  id="deleteEmployee"
+			  parameterType="com.bit_etland.web.emp.Employee"
 			  flushCache="true"
 			  statementType="PREPARED"
 			  timeout="20">

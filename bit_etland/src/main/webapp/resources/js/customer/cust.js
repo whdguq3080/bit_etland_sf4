@@ -47,8 +47,8 @@ cust = (()=>{
 				.appendTo(r_cnt);
 				$('form button[type=submit]').click(e=>{
 					e.preventDefault();
-					login(); // 디폴트화면 기능
-				});
+					/*login(); // 디폴트화면 기능*/				
+					});
 				break;
 			case 'withDrawal':
 				alert('회원탈퇴 접속');
@@ -83,8 +83,8 @@ cust = (()=>{
 	})
 };
 let mypage = d=>{
-	$(r_cnt).html(compo.cust_mypage(
-			{customerName:d.customerName
+	$(r_cnt).html(compo.cust_mypage({
+			customerName:d.customerName
 			,customerID:d.customerID
 			,phone:d.phone
 			,city:d.city
@@ -92,6 +92,27 @@ let mypage = d=>{
 			
 			}));
 	
-}
-	return {init : init};
+				};
+
+let list = ()=>{
+	$('#right_content').empty();
+	$.getJSON($.ctx()+'/cust/page/1',d=>{
+		alert('리스트');
+		$(compo.list())
+		.appendTo('#right_content')
+	$.each(d, (i,j)=>{
+		$('<tr>'
+				+'  <td>'+x.customerID+'</td>'
+				+'  <td>'+x.customerName+'</td>'
+				+'  <td>'+x.ssn+'</td>'
+				+'  <td>'+x.ssn+'</td>'
+				+'  <td>'+x.phone+'</td>'
+				+'  <td>'+x.postalCode+'</td>'
+				+'  <td>'+x.address+'</td>'
+				+'  </tr>'
+				).appendTo('#list')
+		});
+	});
+};
+return {init : init, list:list};
 })();	

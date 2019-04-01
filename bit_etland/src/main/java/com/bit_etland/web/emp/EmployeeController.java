@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bit_etland.web.cmm.IConsumer;
 import com.bit_etland.web.cmm.IFunction;
+import com.bit_etland.web.cmm.ISupplier;
 import com.bit_etland.web.cmm.PrintService;
 import com.bit_etland.web.cmm.Users;
 
 @RestController
+@RequestMapping("/" )
 public class EmployeeController {
 private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 	
@@ -30,25 +32,12 @@ private static final Logger logger = LoggerFactory.getLogger(EmployeeController.
 	@Autowired Map<String,Object> map;
 	
 	
-	@PostMapping("/emp/{userid}")
-	public Employee access(
-							@PathVariable String userid,
-							@RequestBody Employee param) {
-			logger.info("======= login 진입 ======");
-			IFunction i = (Object o)-> empMap.selectEmployee(param);
-			return (Employee)i.apply(param);
+	@GetMapping("/emp")
+	public Employee access() {
+			logger.info("======= 로그인 진입 ======");
+			ISupplier i = ()-> empMap.findOneEmployee(emp);
+			return (Employee)i.get();
 			}
-	/*@SuppressWarnings("unchecked")
-	@GetMapping("/{user}/list")
-	public List<Employee> list(
-							@PathVariable String user,					
-							@RequestBody Map<?,?> param) {
-		logger.info("=======list 진입 ======");
-		IFunction i = (Object o)-> empMap.selectEmployees(param);
-		List<Employee> ls = (List<Employee>) i.apply(param);
-		ps.accept(ls);
-		return ls;
-	}*/
 	@PostMapping("/emp")
 	public Map<?,?> join(
 
@@ -85,3 +74,14 @@ private static final Logger logger = LoggerFactory.getLogger(EmployeeController.
 			return map;
 			}
 }
+/*@SuppressWarnings("unchecked")
+	@GetMapping("/{user}/list")
+	public List<Employee> list(
+							@PathVariable String user,					
+							@RequestBody Map<?,?> param) {
+		logger.info("=======list 진입 ======");
+		IFunction i = (Object o)-> empMap.selectEmployees(param);
+		List<Employee> ls = (List<Employee>) i.apply(param);
+		ps.accept(ls);
+		return ls;
+	}*/
