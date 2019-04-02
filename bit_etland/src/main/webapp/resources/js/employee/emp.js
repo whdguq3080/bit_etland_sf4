@@ -1,4 +1,92 @@
-var ctx = "${ctx}";
+var emp = emp || {}
+emp = (()=>{
+	let init =()=>{
+		_ = $.ctx();
+		js = $.js();
+		compojs = js+'/component/compo.js';
+		custjs = js+'/customer/cust.js';
+		empjs = js+'/employee/emp.js';
+		r_cnt = '#right_content';
+		l_cnt = '#left_content';
+		but = 'form button[type=submit]';
+		onCreate();
+	};
+	let onCreate =()=>{
+		setContentView();
+	};
+	let setContentView =()=>{
+		$.getScript(compojs,()=>{
+		$(l_cnt+' ul.nav').empty();
+	let arr = [
+			{name :'emp_list', val :'고객목록'},
+			{name: 'emp_res' ,val:'상품등록'},
+			{name: 'sang_list',val:'상품목록'},
+			{name: 'sang_update',val:'상품수정'},
+			{name: 'sang_del',val:'상품삭제'},
+			{name: 'sang_end',val:'상품통계'}];
+	$.each(arr, (i,j)=>{
+		$('<li><a href="#">'+j.val+'</a></li>')
+		.attr('name', j.name)
+		.attr('id', j.id)
+		.appendTo(l_cnt+' ul.nav')
+		.click(function(){
+			let that = $(this).attr('name');
+			$(this).addClass('active');
+			$(this).siblings().removeClass('active');
+			switch(that){
+			case 'emp_list':
+			alert('고객목록 접속');
+			break;
+			case 'emp_res':
+				alert('상품등록 접속');
+				$(r_cnt).empty();
+				$(compo.prod_post())
+				.appendTo(r_cnt);
+				break;
+			case 'sang_list':
+				break;
+			case 'sang_update':
+				break;
+			case 'sang_del':
+				break;
+			case 'sang_end':
+				break;
+				}
+			});
+		});	
+	$(this).addClass('active');
+	})
+};
+	return {init:init};
+})()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*var ctx = "${ctx}";
 $('.page').click(()=>{
 	location.assign(
 			ctx + '/customer.do?cmd=cust_list&page=list&page_num='+$(this).text());
@@ -61,3 +149,4 @@ $('#cate_search').click(()=>{
 	            +'    </div>'
 	            +'</form>');
 	});
+*/

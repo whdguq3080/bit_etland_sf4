@@ -26,8 +26,8 @@ auth = (()=>{
 			$(l_cnt+' ul.nav').empty();
 		let arr = [{name: 'login' ,val:'로그인'},
 					{name: 'join',val:'회원가입'},
-					{name: 'register',val:'사원등록'},
-					{name: 'access',val:'사원접속'}
+					{name: 'access',val:'사원접속'},
+					{name: 'register',val:'사원등록'}
 					];
 		$.each(arr, (i,j)=>{
 			$('<li><a href="#">'+j.val+'</a></li>')
@@ -59,12 +59,6 @@ auth = (()=>{
 					join();
 				});
 				break;
-				case 'register':
-					alert('사원등록 접속');
-					$(r_cnt).empty();
-					$(compo.emp_register_form())
-					.appendTo(r_cnt);
-					break;
 				case 'access':
 					alert('사원 접속');
 					$(r_cnt).empty();
@@ -75,6 +69,12 @@ auth = (()=>{
 						alert('사원 접속 클릭');
 						access();
 					});
+					break;
+				case 'register':
+					alert('사원등록 접속');
+					$(r_cnt).empty();
+					$(compo.emp_register_form())
+					.appendTo(r_cnt);
 					break;
 				}
 			});
@@ -89,19 +89,14 @@ let login =()=>{
 		let data ={customerID:$('form input[name=uname]').val(),
 				password:$('form input[name=psw]').val()};
 		$.ajax({
-            url : _+'/users/cust/'+data.customerID,
+            url : _+'/cust/{userId}'+data.customerID,
             type : 'post',
             data : JSON.stringify(data),
             dataType: 'json',
             contentType : "application/json",
             success : d=>{
             	if(d.customerID!==''){
-            	/*$(r_cnt).html(compo.cust_mypage(d));
-					 $('#update').click(e=>{
-						 e.preventDefault();/* 
-						 $(r_cnt).html(compo.cust_update_form(d));
-						 $('#myupdate').click(e=>{ */
-            		  alert('로그인');	
+            		alert('로그인');	
             		cust.init(d);
             	}else{
             	}
@@ -120,7 +115,6 @@ let join =()=>{
 				city:$('form input[name=city]').val(),
 				address:$('form input[name=address]').val(),
 				postalCode:$('form input[name=postalCode]').val()};
-				alert("aaaaaaaa");
 		$.ajax({
             url : _+'/users/cust',
             type : 'post',
@@ -197,8 +191,9 @@ let access =()=>{
 							e.preventDefault();
 						if($('#name').val() === d.name){//고객 명단
 	            		cust.list();
+	            		emp.init();
 	            		}else{
-							alert('사원번호가 일치하지 않습니다123.');
+							alert('사원번호가 일치하지 않습니다.');
 	            		}
 	            		});	
 	            	}else{

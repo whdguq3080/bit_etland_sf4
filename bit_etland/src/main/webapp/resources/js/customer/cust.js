@@ -1,21 +1,23 @@
 var cust = cust || {}
 cust = (()=>{
+	let _,js,compojs,custjs,empjs,r_cnt,l_cnt,but
 	let init =(d)=>{
-			_ = $.ctx();
-			js = $.js();
-			compojs = js+'/component/compo.js';
-			custjs = js+'/customer/cust.js';
-			empjs = js+'/employee/emp.js';
-			r_cnt = '#right_content';
-			l_cnt = '#left_content';
-			but = 'form button[type=submit]';
-			onCreate(d);
+		_ = $.ctx();
+		js = $.js();
+		compojs = js+'/component/compo.js';
+		custjs = js+'/customer/cust.js';
+		empjs = js+'/employee/emp.js';
+		r_cnt = '#right_content';
+		l_cnt = '#left_content';
+		but = 'form button[type=submit]';
+		data = d;
+		onCreate(d);
 		};
 		let onCreate =(d)=>{
 			setContentView(d);
 		};
 		let setContentView =(d)=>{
-		
+		mypage(d);
 		$.getScript(compojs,()=>{
 		$(l_cnt+' ul.nav').empty();
 		let arr = [
@@ -28,7 +30,6 @@ cust = (()=>{
 	$.each(arr, (i,j)=>{
 		$('<li><a href="#">'+j.val+'</a></li>')
 		.attr('name', j.name)
-		.attr('id', j.id)
 		.appendTo(l_cnt+' ul.nav')
 		.click(function(){
 			let that = $(this).attr('name');
@@ -43,11 +44,16 @@ cust = (()=>{
 			case 'change':
 				alert('정보수정 접속');
 				$(r_cnt).empty();
-				$(compo.cust_login_form())
+				$(compo.cust_update_form(d))
 				.appendTo(r_cnt);
 				$('form button[type=submit]').click(e=>{
 					e.preventDefault();
-					/*login(); // 디폴트화면 기능*/				
+					/*login(); // 디폴트화면 기능*/	
+					/*$(r_cnt).html(compo.cust_mypage(d));
+					 $('#update').click(e=>{
+						 e.preventDefault();/* 
+						 $(r_cnt).html(compo.cust_update_form(d));
+						 $('#myupdate').click(e=>{ */
 					});
 				break;
 			case 'withDrawal':
@@ -83,36 +89,54 @@ cust = (()=>{
 	})
 };
 let mypage = d=>{
-	$(r_cnt).html(compo.cust_mypage({
-			customerName:d.customerName
-			,customerID:d.customerID
-			,phone:d.phone
-			,city:d.city
-			,address:d.address
-			
-			}));
-	
-				};
+	$(r_cnt).html(compo.cust_mypage(d));
+	};
 
 let list = ()=>{
-	$('#right_content').empty();
 	$.getJSON($.ctx()+'/cust/page/1',d=>{
-		alert('리스트');
-		$(compo.list())
-		.appendTo('#right_content')
-	$.each(d, (i,j)=>{
-		$('<tr>'
-				+'  <td>'+x.customerID+'</td>'
-				+'  <td>'+x.customerName+'</td>'
-				+'  <td>'+x.ssn+'</td>'
-				+'  <td>'+x.ssn+'</td>'
-				+'  <td>'+x.phone+'</td>'
-				+'  <td>'+x.postalCode+'</td>'
-				+'  <td>'+x.address+'</td>'
-				+'  </tr>'
-				).appendTo('#list')
-		});
+		$('#right_content').empty();
+		$(compo.cust_list_form()).appendTo('#right_content');
+	$.each(d.ls, (i,j)=>{
+		$('<tr><td>'+j.rownum+'</td>'
+		+'  <td>'+j.customerID+'</td>'
+		+'  <td>'+j.customerName+'</td>'
+		+'  <td>'+j.ssn+'</td>'
+		+'  <td>'+j.phone+'</td>'
+		+'  <td>'+j.address+'</td>'
+		+'  <td>'+j.postalCode+'</td>'
+		+'  </tr>')
+		.appendTo('#customers');
+	});
+	html = '<div class="pagination">';
+	if(d.pxy.existPrev){
+		html +='<a href="#" page_num="d.pxy.prevBlock">&laquo;</a>'
+	}
+	for(let i=d.pxy.startPage; i<=d.pxy.endPage; i++){
+		if(d.pxy.pageNum == i){
+			html +=	'<a href="#" class ="page active">'+i+'</a>'
+		}else{
+			html += '<a href="#" class ="page">'+i+'</a>'	
+		}
+	}
+	if(d.pxy.existnext){
+		html += '<a href="#" page_num="d.pxy.nextBlock">&raquo;</a>'
+	}
+	html += '</div>';
+	alert(html);
+	$(html).appendTo('#pagination');
+	
+/*	 $('.page').click(function(){
+	 		alert('--클릭한 페이지--'+$(this).text());
+	 location.assign('${ctx}/customer.do?cmd=cust_list&page=list&page_num='+$(this).text());
+	 });*/
 	});
 };
+/*<div style="height: 50px"></div>    
+ 	<c:if test="${pagination.existNext}">
+	  <a href='${ctx}/category.do?cmd=category_list&page=list&page_num=${pagination.nextBlock}'>&raquo;</a>
+ 	</c:if>
+  </div>
+</div>
+</div>*/
 return {init : init, list:list};
 })();	

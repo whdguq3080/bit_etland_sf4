@@ -34,7 +34,6 @@ public class CustController {
 	@Autowired Users<?> user;
 	@Autowired Proxy pxy;
 	
-	
 	@PostMapping("/cust/{userId}")
 	public Customer login(
 							@PathVariable String userId,
@@ -45,19 +44,22 @@ public class CustController {
 			}
 	
 	
-	@SuppressWarnings("unchecked")
 	@GetMapping("/cust/page/{page}")
-	public List<Customer> list(@PathVariable String page) {
+	public Map<?,?> list(@PathVariable String page) {
 		logger.info("=======list 진입 ======");
-		map.clear();
 		//page_num.page_size,block_Size,totalCount
-		map.put("page_num", "1");
-		map.put("page_size", "5");
-		map.put("block_Size", "5");
-		map.put("totalCount", "");
+		map.clear();
+		map.put("pageNum", "1");
+		map.put("pageSize", "5");
+		map.put("blockSize", "5");
+		map.put("totalCount", "36");
 		pxy.carryOut(map);
 		IFunction i = (Object o)-> custMap.selectCustomers(pxy);
-		return (List<Customer>) i.apply(pxy);
+		List<?> ls = (List<?>) i.apply(pxy);
+		map.clear();
+		map.put("ls", ls);
+		map.put("pxy", pxy);
+		return map;
 	}
 	@PostMapping("/cust")
 	public Map<?,?> join(@RequestBody Customer param) {
