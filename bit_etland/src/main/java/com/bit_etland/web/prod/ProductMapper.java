@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import com.bit_etland.web.cmm.Proxy;
 import com.bit_etland.web.cust.Customer;
 
 @Component
@@ -12,8 +13,8 @@ public interface ProductMapper {
 		public void insertProduct(Product pro);
 		public Product selectProduct(Product pro);
 		public List<Product> selectProducts(Map<?,?> map);
-		public List<Product> selectProductlist(Map<?,?> map); 
-		public int countProduct(Object o);
+		public List<Product> selectProductlist(Proxy pxy); 
+		public int countProduct();
 		public boolean existsProduct(String searchword);
 		
 		public Product updateproduct(Product pro);

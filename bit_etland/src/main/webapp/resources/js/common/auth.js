@@ -190,7 +190,7 @@ let access =()=>{
 	            		.click(e=>{
 							e.preventDefault();
 						if($('#name').val() === d.name){//고객 명단
-	            		cust.list();
+	            		cust.list(1);
 	            		emp.init();
 	            		}else{
 							alert('사원번호가 일치하지 않습니다.');

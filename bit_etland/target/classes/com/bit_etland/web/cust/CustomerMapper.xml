@@ -43,6 +43,10 @@
 	  	 AND PASSWORD LIKE #{password}
 		</if>
   </select>
+  <select id="countCustomer" resultType="int">
+    SELECT COUNT(*) FROM CUSTOMERS
+    	
+  </select>
   <select id="selectCustomers" resultMap="result">
  	SELECT @ROWNUM:=@ROWNUM+1 AS rownum,
            C.*

@@ -25,7 +25,7 @@ public class Proxy {
 		blockSize = (a.get("blockSize")==null)?5:Integer.parseInt(a.get("blockSize"));
 		blockNum = (a.get("block_num")==null)?0:Integer.parseInt(a.get("block_num"));
 		
-		totalCount = Integer.parseInt(a.get("totalCount"));
+		totalCount = (int)pramMap.get("totalCount");
 		startRow = pageSize*(pageNum-1);
 		endRow = pageNum * pageSize;
 		endRow = (totalCount > endRow)?endRow:totalCount;

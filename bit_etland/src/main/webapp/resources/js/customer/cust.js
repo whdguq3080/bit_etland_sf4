@@ -92,10 +92,24 @@ let mypage = d=>{
 	$(r_cnt).html(compo.cust_mypage(d));
 	};
 
-let list = ()=>{
-	$.getJSON($.ctx()+'/cust/page/1',d=>{
+let list = x=>{
+	$.getJSON($.ctx()+'/cust/page/'+x,d=>{
 		$('#right_content').empty();
-		$(compo.cust_list_form()).appendTo('#right_content');
+		$('<div class="grid-item" id="content_1">'
+		+'<h2>고객리스트</h2>'
+		+'</div>'
+		+'<div class="grid-item" id="content_2">'
+		+'<table class="table table-bordered" id="tab"><tr>'
+		+'    <th>No.</th>'
+		+'    <th>아이디</th>'
+		+'    <th>이름</th>'
+		+'    <th>생년월일</th>'
+		+'    <th>전화번호</th>'
+		+'    <th>상세주소</th>'
+		+'    <th>우편번호</th>'
+		+'  </tr>'
+		+'</table>')
+		.appendTo('#right_content');
 	$.each(d.ls, (i,j)=>{
 		$('<tr><td>'+j.rownum+'</td>'
 		+'  <td>'+j.customerID+'</td>'
@@ -105,32 +119,55 @@ let list = ()=>{
 		+'  <td>'+j.address+'</td>'
 		+'  <td>'+j.postalCode+'</td>'
 		+'  </tr>')
-		.appendTo('#customers');
+		.appendTo('#tab');
 	});
-	html = '<div class="pagination">';
+	$('<div style="height: 50px"></div>')
+	.appendTo('#content_1');
+	$('<div class="pagination"></div>').appendTo('#content_2');
 	if(d.pxy.existPrev){
-		html +='<a href="#" page_num="d.pxy.prevBlock">&laquo;</a>'
+		$('<li><a>&laquo;</a></li>')
+		.appendTo('.pagination')
+		.click(function(){
+			alert($(this).text());
+			list(d.pxy.prevBlock);
+		});
 	}
-	for(let i=d.pxy.startPage; i<=d.pxy.endPage; i++){
+	let i =0;
+	for(i=d.pxy.startPage; i<=d.pxy.endPage; i++){
 		if(d.pxy.pageNum == i){
-			html +=	'<a href="#" class ="page active">'+i+'</a>'
+			$('<li><a class="page active">'+i+'</a></li>')
+			.attr('href',$.ctx()+'/cust/page/'+i)
+			.appendTo('.pagination')
+			.click(function(){
+				alert($(this).text());
+				list($(this).text());
+			});
 		}else{
-			html += '<a href="#" class ="page">'+i+'</a>'	
+			$('<li><a class="page">'+i+'</a></li>')
+			.attr('href',$.ctx()+'/cust/page/'+i)
+			.appendTo('.pagination')
+			.click(function(){
+				alert($(this).text());
+				list($(this).text());
+			});
 		}
 	}
 	if(d.pxy.existnext){
-		html += '<a href="#" page_num="d.pxy.nextBlock">&raquo;</a>'
-	}
-	html += '</div>';
-	alert(html);
-	$(html).appendTo('#pagination');
+		$('<li><a>&raquo;</a></li>')
+		.appendTo('.pagination')
+		.click(function(){
+			alert($(this).text());
+			list(d.pxy.nextBlock);
+		});
+		};
+	});
+	/*	html += '</div>';
+		$(html).appendTo('#pagination');*/
 	
 /*	 $('.page').click(function(){
 	 		alert('--클릭한 페이지--'+$(this).text());
 	 location.assign('${ctx}/customer.do?cmd=cust_list&page=list&page_num='+$(this).text());
 	 });*/
-	});
-};
 /*<div style="height: 50px"></div>    
  	<c:if test="${pagination.existNext}">
 	  <a href='${ctx}/category.do?cmd=category_list&page=list&page_num=${pagination.nextBlock}'>&raquo;</a>
@@ -138,5 +175,7 @@ let list = ()=>{
   </div>
 </div>
 </div>*/
+	
+	};
 return {init : init, list:list};
-})();	
+})();

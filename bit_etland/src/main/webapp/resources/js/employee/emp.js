@@ -35,7 +35,9 @@ emp = (()=>{
 			$(this).siblings().removeClass('active');
 			switch(that){
 			case 'emp_list':
-			alert('고객목록 접속');
+				alert('고객목록 접속');
+				$(r_cnt).empty();
+				cust.list(1);
 			break;
 			case 'emp_res':
 				alert('상품등록 접속');
@@ -44,6 +46,10 @@ emp = (()=>{
 				.appendTo(r_cnt);
 				break;
 			case 'sang_list':
+				alert('상품목록 접속');
+				
+				$(r_cnt).empty();
+				prd.get(1);
 				break;
 			case 'sang_update':
 				break;

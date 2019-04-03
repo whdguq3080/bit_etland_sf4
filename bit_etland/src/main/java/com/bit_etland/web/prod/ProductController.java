@@ -1,4 +1,5 @@
-/*package com.bit_etland.web.prod;
+package com.bit_etland.web.prod;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -14,8 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bit_etland.web.cmm.IConsumer;
 import com.bit_etland.web.cmm.IFunction;
+import com.bit_etland.web.cmm.ISupplier;
 import com.bit_etland.web.cmm.PrintService;
+import com.bit_etland.web.cmm.Proxy;
 import com.bit_etland.web.cmm.Users;
+import com.bit_etland.web.emp.EmployeeMapper;
 
 @RestController
 public class ProductController {
@@ -26,6 +30,7 @@ public class ProductController {
 	@Autowired ProductMapper proMap;
 	@Autowired Users<?> user;
 	@Autowired Product pro;
+	@Autowired Proxy pxy;
 	
 	@PostMapping("/phone")
 	public Map<?, ?> insert(
@@ -67,5 +72,22 @@ public class ProductController {
 		return map;	
 		
 	}
+	@GetMapping("/prd/page/{page}")
+	public Map<?,?> list(@PathVariable String page) {
+		logger.info("=======list 진입 ======");
+		//page_num.page_size,block_Size,totalCount
+		map.clear();
+		map.put("pageNum", page);
+		map.put("pageSize", "5");
+		map.put("blockSize", "5");
+		ISupplier c = ()-> proMap.countProduct();
+		map.put("totalCount", c.get());
+		pxy.carryOut(map);
+		IFunction i = (Object o)-> proMap.selectProductlist(pxy);
+		List<?> ls = (List<?>) i.apply(pxy);
+		map.clear();
+		map.put("ls", ls);
+		map.put("pxy", pxy);
+		return map;
+	}
 }
-*/
