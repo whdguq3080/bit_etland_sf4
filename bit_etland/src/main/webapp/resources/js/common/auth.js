@@ -16,6 +16,7 @@ auth = (()=>{
     };
 	let setContentView =()=>{
 		$.getScript(compojs,()=>{
+			
 			$(r_cnt).html(compo.cust_login_form());
 			// 오른쪽 디폴트 화면으로 로그인폼
 			$(but).click(e=>{
@@ -24,6 +25,7 @@ auth = (()=>{
 			});
 			// 왼쪽 네비게이션
 			$(l_cnt+' ul.nav').empty();
+			$('#srch [type=text]').empty();
 		let arr = [{name: 'login' ,val:'로그인'},
 					{name: 'join',val:'회원가입'},
 					{name: 'access',val:'사원접속'},
@@ -80,6 +82,7 @@ auth = (()=>{
 			});
 		});	
 	$('#login').addClass('active');	
+	
 	})
 	.fail(()=>{
 		alert('component/compo.js 를 찾지  못했습니다.');

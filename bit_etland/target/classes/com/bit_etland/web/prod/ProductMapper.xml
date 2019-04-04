@@ -12,14 +12,23 @@
   <result property="price" column="PRICE"/>
   <result property="rownum" column="ROWNUM"/>
 </resultMap>
-<select id="selectProductlist" resultMap="result">
- 	SELECT @ROWNUM:=@ROWNUM+1 AS rownum,
-           C.*
-    FROM PRODUCTS C, (SELECT @ROWNUM:=0)TMP
-    ORDER BY rownum DESC
-    limit #{startRow}, #{pageSize};
+<select id="selectProductlists" resultType="result" parameterType="com.bit_etland.cmm.Proxy">
+ 	SELECT 	@ROWNUM:=@ROWNUM+1 AS rownum,  
+ 			PRODUCT_NAME productName,
+ 			UNIT,
+ 			PRICE,
+ 			CATEGORY_NAME categoryID
+	FROM PRODUCTS JOIN CATEGORIES ON PRODUCTS.CATEGORY_ID LIKE CATEGORIES.CATEGORY_ID
+	WHERE PRODUCT_NAME LIKE #{value}
+	OR UNIT LIKE #{value};
   </select>	  
   <select id="countProduct" resultType="int">
     SELECT COUNT(*) FROM PRODUCTS
+      </select>
+ <select id="countProducts" resultType="int"  parameterType="string">
+    SELECT COUNT(*)
+	FROM PRODUCTS JOIN CATEGORIES ON PRODUCTS.CATEGORY_ID LIKE CATEGORIES.CATEGORY_ID
+	WHERE PRODUCT_NAME LIKE #{value}
+	OR UNIT LIKE #{value};
       </select>
 </mapper>

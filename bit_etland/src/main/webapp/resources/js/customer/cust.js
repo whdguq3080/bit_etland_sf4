@@ -15,6 +15,16 @@ cust = (()=>{
 		};
 		let onCreate =(d)=>{
 			setContentView(d);
+			$('#srch_btn').on('click',()=>{
+				let search = $('#search').val();
+				if($.fn.nullChecker(search)){
+					alert('검색어를 입력하십시오');
+				}else{
+					alert('성공 널이 아닙니다');
+					let arr = {p:'1', s:search};
+					srch(arr);
+				}
+			});
 		};
 		let setContentView =(d)=>{
 		mypage(d);
@@ -152,30 +162,85 @@ let list = x=>{
 			});
 		}
 	}
-	if(d.pxy.existnext){
-		$('<li><a>&raquo;</a></li>')
-		.appendTo('.pagination')
-		.click(function(){
-			alert($(this).text());
-			list(d.pxy.nextBlock);
+		if(d.pxy.existnext){
+			$('<li><a>&raquo;</a></li>')
+			.appendTo('.pagination')
+			.click(function(){
+				alert($(this).text());
+				list(d.pxy.nextBlock);
+				});
+			};
 		});
-		};
-	});
-	/*	html += '</div>';
-		$(html).appendTo('#pagination');*/
-	
-/*	 $('.page').click(function(){
-	 		alert('--클릭한 페이지--'+$(this).text());
-	 location.assign('${ctx}/customer.do?cmd=cust_list&page=list&page_num='+$(this).text());
-	 });*/
-/*<div style="height: 50px"></div>    
- 	<c:if test="${pagination.existNext}">
-	  <a href='${ctx}/category.do?cmd=category_list&page=list&page_num=${pagination.nextBlock}'>&raquo;</a>
- 	</c:if>
-  </div>
-</div>
-</div>*/
-	
 	};
-return {init : init, list:list};
+	let srch =x=>{
+		$.getJSON($.ctx()+'/phones/search/'+x.p+'/'+x.s,d=>{
+			$('#right_content').empty();
+			$('<div class="grid-item" id="content_1">'
+					+'<h2>고객리스트</h2>'
+					+'</div>'
+					+'<div class="grid-item" id="content_2">'
+					+'<table class="table table-bordered" id="tab"><tr>'
+					+'    <th>NO.</th>'
+					+'    <th>제품명</th>'
+					+'    <th>공급업체</th>'
+					+'    <th>카테고리</th>'
+					+'    <th>유닛</th>'
+					+'    <th>가격</th>'
+					+'  </tr>'
+					+'</table>')
+					.appendTo('#right_content');
+			$.each(d.srch, (i,j)=>{
+				$('<tr><td>'+j.rownum+'</td>'
+				+'  <td>'+j.productName+'</td>'
+				+'  <td>'+j.supplierID+'</td>'
+				+'  <td>'+j.categoryID+'</td>'
+				+'  <td>'+j.unit+'</td>'
+				+'  <td>'+j.price+'</td>'
+				/*+'  <td>'+j.categoryID+'</td>'*/
+				+'  </tr>')
+				.appendTo('#tab');
+			});
+			$('<div style="height: 50px"></div>')
+			.appendTo('#content_1');
+			$('<div class="pagination"></div>').appendTo('#content_2');
+			if(d.pxy.existPrev){
+				$('<li><a>&laquo;</a></li>')
+				.appendTo('.pagination')
+				.click(function(){
+					let arr = {p:d.pxy.prevBlock, s:search};
+					srch(arr);
+				});
+			}
+			let i =0;
+			for(i=d.pxy.startPage; i<=d.pxy.endPage; i++){
+				if(d.pxy.pageNum == i){
+					$('<li><a class="page active">'+i+'</a></li>')
+					.attr('href',$.ctx()+'/phones/search/'+i)
+					.appendTo('.pagination')
+					.click(function(){
+						let arr = {p:$(this).text(), s:search};
+						srch(arr);
+					});
+				}else{
+					$('<li><a class="page">'+i+'</a></li>')
+					.attr('href',$.ctx()+'/phones/search/'+i)
+					.appendTo('.pagination')
+					.click(function(){
+						let arr = {p:$(this).text(), s:search};
+						srch(arr);
+					});
+				}
+			}
+				if(d.pxy.existnext){
+					$('<li><a>&raquo;</a></li>')
+					.appendTo('.pagination')
+					.click(function(){
+						alert($(this).text());
+						let arr = {p:d.pxy.nextBlock, s:search};
+						srch(arr);
+						});
+					};
+				});
+			};
+	return {init : init, list:list, srch:srch};
 })();

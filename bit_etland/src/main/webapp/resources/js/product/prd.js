@@ -11,10 +11,52 @@ prd= (()=>{
 	$(r_cnt).html(compo.carousel());
 	};
 	let post=()=>{
-		
+		$('#right_content').empty();
+		$(compo.prod_post())
+		.appendTo('#right_content');
+		$('#prd_post_btn').click(e=>{
+			e.preventDefault();
+			
+			let freebies =[];
+			$(".checks:checked").each(function(i){
+				freebies.push($(this).val());
+			});
+			let pname = $('#product_name').val();
+			let price = $('#price').val();
+			let comment = $('#comment').val();
+			let unit = $('#unit').val();
+			if($.fn.nullChecker([pname,price,unit])){
+				alert('빈칸을 입력해주세요');
+			}else{
+				alert('성공 널이 아닙니다');
+			}
+				
+			let data = {categoryID:$('#category_id option:selected').val(),
+						productName:$('#product_name').val(),
+						price:$('price').val(),
+						unit:$('#unit').val(),
+						supplierID:$('#supplier_id').val(),
+						color:$('input[name=color]:checked').val(),
+						freebies:freebies,
+						comment:$('#comment').text()}; 
+			$.ajax({
+				url:$.ctx()+'/phones/{userId}',
+				type:'post',
+				data:JSON.stringify(data),
+				dataType:'json',
+				contentType:'application/json',
+				success:d=>{
+					alert('성공');
+					post();
+				},
+				error:e=>{
+					alert('에러');
+				}
+			})
+		})
 	};
 	let get=x=>{
-		$.getJSON($.ctx()+'/prd/page/'+x,d=>{
+		$.getJSON($.ctx()+'/phones/page/'+x,d=>{
 			$('#right_content').empty();
 			$('<div class="grid-item" id="content_1">'
 			+'<h2>고객리스트</h2>'
@@ -80,21 +122,6 @@ prd= (()=>{
 			});
 			};
 		});
-		/*	html += '</div>';
-			$(html).appendTo('#pagination');*/
-		
-	/*	 $('.page').click(function(){
-		 		alert('--클릭한 페이지--'+$(this).text());
-		 location.assign('${ctx}/customer.do?cmd=cust_list&page=list&page_num='+$(this).text());
-		 });*/
-	/*<div style="height: 50px"></div>    
-	 	<c:if test="${pagination.existNext}">
-		  <a href='${ctx}/category.do?cmd=category_list&page=list&page_num=${pagination.nextBlock}'>&raquo;</a>
-	 	</c:if>
-	  </div>
-	</div>
-	</div>*/
-		
 	};
 	let put=()=>{
 		
@@ -102,5 +129,5 @@ prd= (()=>{
 	let del=()=>{
 		
 	};
-	return {init:init ,get: get};
+	return {init:init ,get: get,post:post};
 })();	

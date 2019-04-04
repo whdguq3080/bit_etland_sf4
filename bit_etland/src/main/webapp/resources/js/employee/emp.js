@@ -13,6 +13,9 @@ emp = (()=>{
 	};
 	let onCreate =()=>{
 		setContentView();
+		$('#srch_btn').on('click',()=>{
+			alert('테스트');
+		});
 	};
 	let setContentView =()=>{
 		$.getScript(compojs,()=>{
@@ -41,13 +44,10 @@ emp = (()=>{
 			break;
 			case 'emp_res':
 				alert('상품등록 접속');
-				$(r_cnt).empty();
-				$(compo.prod_post())
-				.appendTo(r_cnt);
+				prd.post();
 				break;
 			case 'sang_list':
 				alert('상품목록 접속');
-				
 				$(r_cnt).empty();
 				prd.get(1);
 				break;
@@ -63,6 +63,9 @@ emp = (()=>{
 	$(this).addClass('active');
 	})
 };
+	let srch =()=>{
+		
+	};
 	return {init:init};
 })()
 
