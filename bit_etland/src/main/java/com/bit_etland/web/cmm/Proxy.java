@@ -1,8 +1,16 @@
 package com.bit_etland.web.cmm;
 
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
-
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.servlet.ServletRequestContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -13,23 +21,23 @@ public class Proxy {
 	private int pageNum, pageSize, blockSize,totalCount,blockNum,
 	startRow,endRow,startPage,endPage,prevBlock,nextBlock,pageCount;
 	private boolean existPrev, existnext;
-	
-	public void carryOut(Map<?,?> pramMap) {
+	private String search;
+	@Autowired Image img;
+	public void carryOut(Map<?,?> paramMap) {
+		search= (String) paramMap.get("search");
 		
-
-		@SuppressWarnings("unchecked")
-		Map<String,String> a = (Map<String, String>) pramMap;
+		pageNum = (paramMap.get("pageNum")==null)?1: Integer.parseInt((String) paramMap.get("pageNum"));
+		pageSize = (paramMap.get("pageSize")==null)?5: Integer.parseInt((String)paramMap.get("pageSize"));
+		blockSize = (paramMap.get("blockSize")==null)?5:Integer.parseInt((String)paramMap.get("blockSize"));
+		blockNum = (paramMap.get("block_num")==null)?0:Integer.parseInt((String)paramMap.get("block_num"));
 		
-		pageNum = (a.get("pageNum")==null)?1: Integer.parseInt(a.get("pageNum"));
-		pageSize = (a.get("pageSize")==null)?5: Integer.parseInt(a.get("pageSize"));
-		blockSize = (a.get("blockSize")==null)?5:Integer.parseInt(a.get("blockSize"));
-		blockNum = (a.get("block_num")==null)?0:Integer.parseInt(a.get("block_num"));
+		totalCount = (int) paramMap.get("totalCount");
 		
-		totalCount = (int)pramMap.get("totalCount");
 		startRow = pageSize*(pageNum-1);
 		endRow = pageNum * pageSize;
 		endRow = (totalCount > endRow)?endRow:totalCount;
 		pageCount = totalCount/pageSize;
+		
 		if(totalCount%pageSize!=0) {
 			pageCount++;
 		}
@@ -43,7 +51,33 @@ public class Proxy {
 		existnext = (pageCount<=(startPage + pageSize))?false:true;
 		prevBlock = startPage - pageSize;
 		nextBlock = startPage + pageSize;
-		System.out.println(startPage);
-		System.out.println("endPage       "+endPage);
-}
+		}
+		public void fileUpload(String customerID) {
+			FileItemFactory factory = new DiskFileItemFactory();
+			ServletFileUpload upload = new ServletFileUpload(factory);
+			upload.setFileSizeMax(1024 * 1024 * 40); //40 MB
+			upload.setSizeMax(1024 * 1024 * 50); //50 MB
+			List<FileItem> items = null;
+			try {
+				File file = null;
+				/*items = upload.parseRequest(new ServletRequestContext(request));*/
+				Iterator<FileItem> it = items.iterator();
+				while(it.hasNext()) {
+					FileItem item = it.next();
+					if(!item.isFormField()) {
+						String fileName = item.getName();
+						file = new File(""+fileName);
+						item.write(file);
+						img.setImgName(fileName.substring(0,fileName.indexOf(".")));
+						img.setImgExtention(fileName.substring(fileName.indexOf(".")+1));
+						img.setOwner(customerID);
+						//DB 에 입력하기
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 }

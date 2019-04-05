@@ -54,6 +54,27 @@ prd= (()=>{
 				}
 			})
 		})
+		$('#img_upload_btn').click(function(){
+			let ok= (this.files[0].name.match('/jpg|gif|png|jpeg/i')) ? true : false;
+			if(ok){
+				/*let fd = new FormData();
+				fd.append('file', this.files[0])*/
+				$('#img_upload_frm').attr('action',$.ctx()+'/phones/files');
+				$.ajax({
+					url : $('#img_upload_frm').attr('action'),
+					dataType : 'text',
+					enctype :"multipart/form-data",
+					beforeSubmit: function(){
+						alert('로딩');
+					},
+					success : d=>{
+						alert('파일업로드 성공');
+					}
+				}).submit();
+			}else{
+				alert('gif, png, jpg, jpeg 파일만 업로드 할 수 있습니다.')
+			}
+		});
 	};
 	let get=x=>{
 		$.getJSON($.ctx()+'/phones/page/'+x,d=>{

@@ -12,11 +12,11 @@ import com.bit_etland.web.cmm.Proxy;
 public interface ProductMapper {
 		public void insertProduct(Product pro);
 		public Product selectProduct(Product pro);
-		public List<Product> selectProducts(Map<?,?> map);
-		public List<Product> selectProductlist(Proxy pxy); 
-		public List<Product> selectProductlists(String search); 
+		public List<?> selectProducts(Map<?,?> map);
+		public List<?> selectProductlists(Proxy pxy); 
+		public List<?> selectProductlist(Proxy pxy); 
 		public int countProduct();
-		public int countProducts(String s);
+		public int countProducts(String search);
 		public boolean existsProduct(String searchword);
 		
 		public Product updateproduct(Product pro);

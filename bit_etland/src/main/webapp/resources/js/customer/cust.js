@@ -20,7 +20,7 @@ cust = (()=>{
 				if($.fn.nullChecker(search)){
 					alert('검색어를 입력하십시오');
 				}else{
-					alert('성공 널이 아닙니다');
+					alert('검색중 ');
 					let arr = {p:'1', s:search};
 					srch(arr);
 				}
@@ -96,6 +96,7 @@ cust = (()=>{
 			});
 		});	
 		$(this).addClass('active');
+		
 	})
 };
 let mypage = d=>{
@@ -172,31 +173,28 @@ let list = x=>{
 			};
 		});
 	};
-	let srch =x=>{
-		$.getJSON($.ctx()+'/phones/search/'+x.p+'/'+x.s,d=>{
+let srch =x=>{
+	let url = _+'/phones/search/'+ x.s+'/'+x.p;
+	$.getJSON(url,d=>{
 			$('#right_content').empty();
 			$('<div class="grid-item" id="content_1">'
 					+'<h2>고객리스트</h2>'
+					+'<button id="grid_btn">그리드로 보기</button>'
 					+'</div>'
 					+'<div class="grid-item" id="content_2">'
 					+'<table class="table table-bordered" id="tab"><tr>'
-					+'    <th>NO.</th>'
 					+'    <th>제품명</th>'
 					+'    <th>공급업체</th>'
-					+'    <th>카테고리</th>'
 					+'    <th>유닛</th>'
 					+'    <th>가격</th>'
 					+'  </tr>'
 					+'</table>')
 					.appendTo('#right_content');
 			$.each(d.srch, (i,j)=>{
-				$('<tr><td>'+j.rownum+'</td>'
-				+'  <td>'+j.productName+'</td>'
+				$('<tr><td>'+j.productName+'</td>'
 				+'  <td>'+j.supplierID+'</td>'
-				+'  <td>'+j.categoryID+'</td>'
 				+'  <td>'+j.unit+'</td>'
 				+'  <td>'+j.price+'</td>'
-				/*+'  <td>'+j.categoryID+'</td>'*/
 				+'  </tr>')
 				.appendTo('#tab');
 			});
@@ -207,7 +205,7 @@ let list = x=>{
 				$('<li><a>&laquo;</a></li>')
 				.appendTo('.pagination')
 				.click(function(){
-					let arr = {p:d.pxy.prevBlock, s:search};
+					let arr = {p:d.pxy.prevBlock, s:x.s};
 					srch(arr);
 				});
 			}
@@ -218,7 +216,7 @@ let list = x=>{
 					.attr('href',$.ctx()+'/phones/search/'+i)
 					.appendTo('.pagination')
 					.click(function(){
-						let arr = {p:$(this).text(), s:search};
+						let arr = {p:$(this).text(), s:x.s};
 						srch(arr);
 					});
 				}else{
@@ -226,7 +224,7 @@ let list = x=>{
 					.attr('href',$.ctx()+'/phones/search/'+i)
 					.appendTo('.pagination')
 					.click(function(){
-						let arr = {p:$(this).text(), s:search};
+						let arr = {p:$(this).text(), s:x.s};
 						srch(arr);
 					});
 				}
@@ -236,11 +234,36 @@ let list = x=>{
 					.appendTo('.pagination')
 					.click(function(){
 						alert($(this).text());
-						let arr = {p:d.pxy.nextBlock, s:search};
+						let arr = {p:d.pxy.nextBlock, s:x.s};
 						srch(arr);
 						});
 					};
+					//그리드 버튼 클릭시
+					$('#grid_btn').click(e=>{
+						alert("클릭");
+						$('#content_2').empty();
+						let url = _+'/phones/'+x.s+'/grid/'+x.p;
+						$.getJSON(url,d=>{
+							 let i = 0;
+							$('<div	id="grid" />').appendTo('#content_2');
+									$.each(d.ls,(x,y)=>{
+								$('<div class="col-md-4">'
+					                      +'<div class="thumbnail">'
+					                        +'<a href="#" target="_blank">'
+					                          +'<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRanydDprvV35nlbHP2RwvjdyPrYgOgjevy7W_efJ2tTEVZvKKF" alt="Lights" style="width:100%">'
+					                          +'<div class="caption">'
+					                            +'<p>Lorem ipsum donec id elit non mi porta gravida at eget metus.</p>'
+					                          +'</div>'
+					                        +'</a>'
+					                      +'</div>'
+					              		).appendTo('#grid')
+								});
+								});
+						$('#grid_btn').text('리스트 보기').click(e=>{
+							srch(x);
+						});
 				});
-			};
-	return {init : init, list:list, srch:srch};
+	});
+}
+	return {init : init, list:list ,srch:srch};
 })();

@@ -82,7 +82,7 @@ auth = (()=>{
 			});
 		});	
 	$('#login').addClass('active');	
-	
+	$('#srch_grp').hide();
 	})
 	.fail(()=>{
 		alert('component/compo.js 를 찾지  못했습니다.');

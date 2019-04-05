@@ -1,6 +1,9 @@
 package com.bit_etland.web.prod;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.bit_etland.web.cat.Category;
 import com.bit_etland.web.cat.CategoryMapper;
@@ -39,7 +46,8 @@ public class ProductController {
 	@Autowired SupplierMapper supMap;
 	@Autowired Category cat;
 	@Autowired Supplier sup;
-	
+	@Resource(name = "uploadPath")private String uploadPath; 
+    
 	@Transactional
 	@PostMapping("/phones")
 	public Map<?, ?> regist(
@@ -61,27 +69,6 @@ public class ProductController {
 		map.clear();
 		map.put("msg", "SUCCESS");
 		return map;	
-	}
-	@SuppressWarnings("unchecked")
-	@GetMapping("/phones/search/{page}/{search}")
-	public Map<?,?> select(	
-			@PathVariable("page") String page,	
-			@PathVariable("search") String search) {
-		logger.info("=======상품 리스트 진입 ======");
-		map.clear();
-		map.put("pageNum", page);
-		map.put("pageSize", "5");
-		map.put("blockSize", "5");
-		String sa = "%"+search+"%";
-		IFunction c = (Object o)-> proMap.countProducts(sa);
-		map.put("totalCount", c.apply(sa));
-		map.clear();
-		IFunction s = (Object o)-> proMap.selectProductlists(search);
-		List<Product> list = (List<Product>) s.apply(search);
-		System.out.println("상품"+list.toString());
-		map.put("srch", list);
-		map.put("pxy", pxy);
-		return map;
 	}
 	@PutMapping("/phones/{id}")
 	public Map<?,?> update(@PathVariable String userid,
@@ -115,6 +102,7 @@ public class ProductController {
 		ISupplier c = ()-> proMap.countProduct();
 		map.put("totalCount", c.get());
 		pxy.carryOut(map);
+		
 		IFunction i = (Object o)-> proMap.selectProductlist(pxy);
 		List<?> ls = (List<?>) i.apply(pxy);
 		map.clear();
@@ -122,4 +110,57 @@ public class ProductController {
 		map.put("pxy", pxy);
 		return map;
 	}
+	@GetMapping("/phones/search/{search}/{page}")
+	public Map<?,?> search(	
+			@PathVariable("search") String search,	
+			@PathVariable("page") String page) {
+		logger.info("=======상품 리스트 진입 ======");
+		String sa = "%"+search+"%";
+		map.clear();
+		map.put("search", sa);
+		map.put("pageNum", page);
+		map.put("pageSize", "5");
+		map.put("blockSize", "5");
+		map.put("totalCount", proMap.countProducts(sa));
+		pxy.carryOut(map);
+		map.clear();
+		map.put("pxy", pxy);
+		map.put("srch", proMap.selectProductlists(pxy));
+		return map;
+	}
+	//'/phones/search/grid/'+x.s
+	@GetMapping("/phones/{search}/grid/{page}")
+	public Map<?,?> grid(
+			@PathVariable("search") String search, 
+			@PathVariable("page") String page){
+		logger.info("=======grid 진입 ======");
+		//page_num.page_size,block_Size,totalCount
+		map.clear();
+		String sa = "%"+search+"%";
+		map.put("search", sa);
+		map.put("pageNum", page);
+		map.put("pageSize", "9");
+		map.put("totalCount", proMap.countProducts(sa));
+		pxy.carryOut(map);
+		ps.accept("검색어:: "+search);
+        ps.accept("페이지:: "+page);
+        ps.accept("스타트:: "+pxy.getStartRow());
+        ps.accept("엔드:: "+pxy.getEndRow());
+		map.clear();
+		map.put("ls", proMap.selectProductlists(pxy));
+		map.put("pxy", pxy);
+		return map;
+	}
+	@RequestMapping(value="/phones/files", method= RequestMethod.POST)
+	public Map<?,?> fileUpload(
+			 MultipartHttpServletRequest req )throws Exception{
+		Iterator<String> it = req.getFileNames();
+		if(it.hasNext()) {
+			MultipartFile mf = req.getFile(it.next());
+			ps.accept("넘어온 파일명:"+mf.getName());
+		}
+		ps.accept("파일 저장경로 : "+uploadPath);
+		return map;
+		
+	} 
 }
